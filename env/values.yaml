@@ -1,14 +1,28 @@
-expose:
-  Args: 
-    - --v
-    - 4
-  Annotations:
-    helm.sh/hook: post-install,post-upgrade
-    helm.sh/hook-delete-policy: hook-succeeded
-
+PipelineSecrets: {}
 cleanup:
-  Args: 
-    - --cleanup
   Annotations:
     helm.sh/hook: pre-delete
     helm.sh/hook-delete-policy: hook-succeeded
+  Args:
+  - --cleanup
+expose:
+  Annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-delete-policy: hook-succeeded
+  Args:
+  - --v
+  - 4
+  config:
+    domain: danielchallenge2.tk
+    exposer: Ingress
+    http: "true"
+jenkins:
+  Servers:
+    GHE:
+    - Name: Challenge2
+      Url: https://github.com/DanielMT57/BancolombiaChallenge2/api/v3/
+    Global:
+      EnvVars:
+        DOCKER_REGISTRY: 497380164745.dkr.ecr.us-east-2.amazonaws.com
+        TILLER_NAMESPACE: kube-system
+prow: {}
